@@ -20,7 +20,6 @@ class CreateTableUser extends Migration
             $table->string("email", 250);
             $table->string("password", 100);
             $table->timestamp("created")->defaultCurrent();
-            $table->timestamp("updated")->nullable()->defaultCurrentOnUpdate();
         });
     }
 
