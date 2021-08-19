@@ -18,7 +18,7 @@ class CreateTableToken extends Migration
             // fields
             $table->id("id");
             $table->int("user_id")->unsigned();
-            $table->string("token", 500);
+            $table->string("value", 500);
 
             // foreign key
             $table->foreign("user_id")

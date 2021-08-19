@@ -20,7 +20,7 @@ class CreateTableMessage extends Migration
             $table->int("entry_id")->unsigned();
             $table->int("citizen_id")->unsigned();
             $table->string("content");
-            $table->tinyInt("commited")->default(false);
+            $table->bool("commited")->default(false);
             $table->timestamp("created")->defaultCurrent();
 
             // foreign keys

@@ -24,8 +24,8 @@ class CreateTableEntry extends Migration
             $table->float("longitude");
             $table->int("category_id")->unsigned();
             $table->int("citizen_id")->unsigned();
-            $table->tinyInt("commited")->default(false);
-            $table->tinyInt("chat_available")->default(true);
+            $table->bool("commited")->default(false);
+            $table->bool("chat_available")->default(true);
             $table->timestamp("created")->defaultCurrent();
 
             // foreign keys
