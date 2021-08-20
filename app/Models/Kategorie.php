@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Curfle\DAO\Model;
 
-class Token extends Model
+class Kategorie extends Model
 {
-
     public int $id;
 
+    /**
+     * @param string|null $name
+     * @param string|null $farbe
+     */
     public function __construct(
-        public ?string $value = null,
+        public ?string $name = null,
+        public ?string $farbe = null,
     )
     {
     }
@@ -21,7 +25,7 @@ class Token extends Model
     static function config(): array
     {
         return [
-            "table" => "myTable",
+            "table" => "kategorie",
         ];
     }
 }
