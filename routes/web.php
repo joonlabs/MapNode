@@ -12,6 +12,17 @@ use Curfle\Support\Facades\Route;
  */
 
 /**
+ * Route for confirming entries, which were created by the GraphQL api.
+ */
+Route::get("/confirm/{id}", function (Request $request) {
+    $id = $request->input("id");
+    $eintrag = \App\Models\Eintrag::get($id);
+    $eintrag->bestaetigt = true;
+    $eintrag->update();
+    echo "Ihr Eintrag wurde erfolgreich bestätigt. Sie können diese Seite nun schliessen.";
+})->where("id", "[0-9]+");
+
+/**
  * Serving route for the vue project. All requests are catched
  * and redirected by this route. After trying to resolve the request
  * it either returns the according file content, or throws a 404 HTTP

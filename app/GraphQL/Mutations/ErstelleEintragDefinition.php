@@ -6,10 +6,13 @@ use App\GraphQL\Types\Eintrag;
 use App\GraphQL\Types\Input\EintragInput;
 use App\GraphQL\Types\Login;
 use App\GraphQL\Utilities\Definition;
+use App\Mail\ConfirmEntry;
 use App\Models\Benutzer;
+use App\Models\Buerger;
 use Curfle\Auth\JWT\JWT;
 use Curfle\Http\Request;
 use Curfle\Support\Facades\Auth;
+use Curfle\Support\Facades\Mail;
 use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Errors\BadUserInputError;
 use GraphQL\Errors\UnauthenticatedError;
@@ -37,7 +40,18 @@ class ErstelleEintragDefinition extends Definition
                     if ($value === NULL) unset($args["eintrag"][$key]);
 
                 // create entry
-                return \App\Models\Eintrag::create($args["eintrag"]);
+                $eintrag = \App\Models\Eintrag::create($args["eintrag"]);
+
+                // send mail
+                $buerger = Buerger::get($args["eintrag"]["buerger_id"]);
+                Mail::to($buerger->email)
+                    ->send(new ConfirmEntry(
+                        $buerger->vorname . " " . $buerger->nachname,
+                        env("APP_URL") . "/confirm/{$eintrag->id}"
+                    ));
+
+                // return entry
+                return $eintrag;
             },
             [
                 new GraphQLFieldArgument("eintrag", new GraphQLNonNull(EintragInput::get())),
