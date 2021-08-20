@@ -2,6 +2,7 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Mutations\LoginDefinition;
 use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Fields\GraphQLTypeField;
 use GraphQL\Types\GraphQLInt;
@@ -21,18 +22,7 @@ class Mutation
     {
         return new GraphQLObjectType("Mutation", "Root Mutation", function (){
             return [
-                new GraphQLTypeField(
-                    "calc",
-                    new GraphQLInt(),
-                    "Your first calc mutation in GraphQL",
-                    function ($_, $args){
-                        return $args["a"] + $args["b"];
-                    },
-                    [
-                        new GraphQLFieldArgument("a", new GraphQLNonNull(new GraphQLInt()), "", 2),
-                        new GraphQLFieldArgument("b", new GraphQLNonNull(new GraphQLInt()))
-                    ]
-                )
+                LoginDefinition::get()
             ];
         });
     }
