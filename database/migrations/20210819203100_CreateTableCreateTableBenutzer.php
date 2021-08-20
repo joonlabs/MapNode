@@ -5,7 +5,7 @@ use Curfle\Database\Schema\Blueprint;
 use Curfle\Database\Schema\ForeignKeyConstraint;
 use Curfle\Support\Facades\Schema;
 
-class CreateTableToken extends Migration
+class CreateTableBenutzer extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +14,21 @@ class CreateTableToken extends Migration
      */
     public function up()
     {
-        Schema::create("token", function (Blueprint $table) {
+        Schema::create("benutzer", function (Blueprint $table) {
             // fields
             $table->id("id");
-            $table->int("user_id")->unsigned();
-            $table->string("value", 500);
+            $table->int("mandant_id")->unsigned()->nullable();
+            $table->string("vorname", 250);
+            $table->string("nachname", 250);
+            $table->string("email", 250);
+            $table->string("passwort", 100);
+            $table->int("benutzerrolle"); // 1=root, 2=admin
+            $table->timestamp("erstellt")->defaultCurrent();
 
             // foreign key
-            $table->foreign("user_id")
+            $table->foreign("mandant_id")
                 ->references("id")
-                ->on("user")
+                ->on("mandant")
                 ->onDelete(ForeignKeyConstraint::CASCADE)
                 ->onUpdate(ForeignKeyConstraint::CASCADE);
         });
@@ -36,6 +41,6 @@ class CreateTableToken extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("token");
+        Schema::dropIfExists("benutzer");
     }
 }

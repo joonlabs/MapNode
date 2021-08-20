@@ -17,13 +17,13 @@ class InsertRootUser extends Migration
      */
     public function up()
     {
-        DB::table("user")
+        DB::table("benutzer")
             ->insert([
-                "firstname" => "MapNode",
-                "lastname" => "Admin",
+                "vorname" => "MapNode",
+                "nachname" => "Admin",
                 "email" => "root@mapnode",
-                "password" => Hash::hash("root"),
-                "role" => 1
+                "passwort" => Hash::hash("root"),
+                "benutzerrolle" => 1
             ]);
     }
 
@@ -34,7 +34,7 @@ class InsertRootUser extends Migration
      */
     public function down()
     {
-        DB::table("user")
+        DB::table("benutzer")
             ->where("email", "root@mapnode")
             ->delete();
     }
