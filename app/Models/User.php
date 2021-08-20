@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Curfle\DAO\Model;
+use Curfle\DAO\AuthenticatableModel;
 use Curfle\DAO\Relationships\OneToManyRelationship;
 use Curfle\DAO\Relationships\OneToOneRelationship;
 
-class User extends Model
+class User extends AuthenticatableModel
 {
 
     const ROLE_ADMIN = 1;
@@ -20,7 +20,7 @@ class User extends Model
      * @param string|null $email
      * @param int|null $role
      * @param int|null $client_id
-     * @param int|null $created
+     * @param string|null $created
      */
     public function __construct(
         public ?string $firstname = null,
@@ -28,7 +28,7 @@ class User extends Model
         public ?string $email = null,
         public ?int    $role = null,
         public ?int    $client_id = null,
-        public ?int    $created = null,
+        public ?string $created = null,
     )
     {
     }

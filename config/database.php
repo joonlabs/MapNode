@@ -5,7 +5,7 @@ use Curfle\Support\Str;
 return [
 
     /**
-     * Here you may specify your default databse connection. This one will
+     * Here you may specify your default database connection. This one will
      * be used if no other connector name gets specified. Of course, you can
      * use as many (different) connections as you would like to do.
      */

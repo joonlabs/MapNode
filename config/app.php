@@ -51,6 +51,7 @@ return [
         Curfle\Database\DatabaseServiceProvider::class,
         Curfle\Mail\MailServiceProvider::class,
         Curfle\Hash\HashServiceProvider::class,
+        Curfle\Auth\AuthenticationServiceProvider::class,
 
         /*
          * Package Service Providers...

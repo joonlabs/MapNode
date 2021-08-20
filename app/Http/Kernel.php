@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Authenticated;
+use Curfle\Auth\Middleware\Authenticate;
 use \Curfle\Essence\Http\Kernel as HttpKernel;
 use Curfle\Http\Middleware\AllowCors;
 use Curfle\Http\Middleware\TrimStrings;
@@ -41,6 +41,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected array $routeMiddleware = [
-        "auth" => Authenticated::class
+        "auth" => Authenticate::class
     ];
 }
