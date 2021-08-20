@@ -2,6 +2,11 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Mutations\BearbeiteEintragDefinition;
+use App\GraphQL\Mutations\ErstelleBuergerDefinition;
+use App\GraphQL\Mutations\ErstelleEintragDefinition;
+use App\GraphQL\Mutations\ErstelleMandantDefinition;
+use App\GraphQL\Mutations\ErstelleNachrichtDefinition;
 use App\GraphQL\Mutations\LoginDefinition;
 use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Fields\GraphQLTypeField;
@@ -22,7 +27,12 @@ class Mutation
     {
         return new GraphQLObjectType("Mutation", "Root Mutation", function (){
             return [
-                LoginDefinition::get()
+                LoginDefinition::get(),
+                ErstelleEintragDefinition::get(),
+                ErstelleBuergerDefinition::get(),
+                ErstelleNachrichtDefinition::get(),
+                ErstelleMandantDefinition::get(),
+                BearbeiteEintragDefinition::get()
             ];
         });
     }

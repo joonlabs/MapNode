@@ -2,6 +2,9 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Queries\EintragDefinition;
+use App\GraphQL\Queries\MandantDefinition;
+use App\GraphQL\Queries\MandantenDefinition;
 use GraphQL\Fields\GraphQLTypeField;
 use GraphQL\Types\GraphQLObjectType;
 use GraphQL\Schemas\Schema as GraphQLSchema;
@@ -18,12 +21,9 @@ class Query
     {
         return new GraphQLObjectType("Query", "Root Query", function (){
             return [
-                new GraphQLTypeField(
-                    "hello",
-                    new GraphQLString(),
-                    "Your first hello world GraphQL-Application",
-                    function (){ return 'Hello world!'; }
-                )
+                MandantenDefinition::get(),
+                MandantDefinition::get(),
+                EintragDefinition::get(),
             ];
         });
     }

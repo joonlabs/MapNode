@@ -4,7 +4,7 @@ namespace App\GraphQL\Mutations;
 
 use App\GraphQL\Types\Login;
 use App\GraphQL\Utilities\Definition;
-use App\Models\User;
+use App\Models\Benutzer;
 use Curfle\Auth\JWT\JWT;
 use Curfle\Support\Facades\Auth;
 use GraphQL\Arguments\GraphQLFieldArgument;
@@ -15,11 +15,12 @@ use GraphQL\Types\GraphQLString;
 
 class LoginDefinition extends Definition
 {
+    protected static ?object $instance = null;
 
     /**
      * @inheritDoc
      */
-    protected static function build(): object
+    public static function build(): object
     {
         return new GraphQLTypeField(
             "login",
@@ -28,14 +29,14 @@ class LoginDefinition extends Definition
             function ($_, $args) {
                 // try to login user
                 if (Auth::attempt($args)) {
-                    $user = User::get(User::where("email", $args["email"])->first()["id"]);
+                    $user = Benutzer::get(Benutzer::where("email", $args["email"])->first()["id"]);
                     $token = JWT::generate([
                         "sub" => $user->id,
-                        "firstname" => $user->firstname,
-                        "lastname" => $user->lastname,
+                        "vorname" => $user->vorname,
+                        "nachname" => $user->nachname,
                         "email" => $user->email,
-                        "role" => $user->role,
-                        "created" => $user->created,
+                        "benutzerrolle" => $user->benutzerrolle,
+                        "erstellt" => $user->erstellt,
                     ]);
                     return ["token" => $token];
                 }
@@ -44,7 +45,7 @@ class LoginDefinition extends Definition
             },
             [
                 new GraphQLFieldArgument("email", new GraphQLNonNull(new GraphQLString())),
-                new GraphQLFieldArgument("password", new GraphQLNonNull(new GraphQLString()))
+                new GraphQLFieldArgument("passwort", new GraphQLNonNull(new GraphQLString()))
             ]
         );
     }

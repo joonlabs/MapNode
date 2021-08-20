@@ -5,13 +5,6 @@ namespace App\GraphQL\Utilities;
 abstract class Definition
 {
     /**
-     * Holds the GraphQL-Field, -Argument, -Type, etc. instance.
-     *
-     * @var object|null
-     */
-    static ?object $instance = null;
-
-    /**
      * Builds a GraphQL-Field, -Argument, -Type, etc.
      *
      * @return object
@@ -24,9 +17,9 @@ abstract class Definition
      */
     public static function get(): object
     {
-        if (self::$instance !== null)
-            return self::$instance;
+        if (static::$instance !== null)
+            return static::$instance;
 
-        return self::$instance = call_user_func(get_called_class() . "::build");
+        return static::$instance = static::build();
     }
 }
