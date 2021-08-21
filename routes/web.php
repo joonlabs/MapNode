@@ -12,14 +12,33 @@ use Curfle\Support\Facades\Route;
  */
 
 /**
- * Route for confirming entries, which were created by the GraphQL api.
+ * MapNode application serving.
+ */
+Route::get("/mapnode/{mandant}/{token}", function (Request $request) {
+    return view("application", [
+        "mandant" => $request->input("mandant"),
+        "token" => $request->input("token"),
+    ]);
+})->where("mandant", "[0-9]+")
+    ->where("token", "([a-z]|[A-Z]|[0-9])+");
+
+/**
+ * Confirming entries, which were created by the GraphQL api.
  */
 Route::get("/confirm/{id}", function (Request $request) {
-    $id = $request->input("id");
-    $eintrag = \App\Models\Eintrag::get($id);
+    // obtain entry
+    $eintrag = \App\Models\Eintrag::get($request->input("id"));
+
+    // check if entry exists
+    if ($eintrag === null)
+        abort(404, "Not found");
+
+    // update entry
     $eintrag->bestaetigt = true;
     $eintrag->update();
-    echo "Ihr Eintrag wurde erfolgreich bestätigt. Sie können diese Seite nun schliessen.";
+
+    // return view
+    return view("confirmed");
 })->where("id", "[0-9]+");
 
 /**

@@ -52,6 +52,10 @@ class EintragInput extends Definition
                         new GraphQLNonNull(new GraphQLFloat()),
                     ),
                     new GraphQLTypeField(
+                        "mandant_id",
+                        new GraphQLNonNull(new GraphQLInt()),
+                    ),
+                    new GraphQLTypeField(
                         "kategorie_id",
                         new GraphQLNonNull(new GraphQLInt()),
                     ),

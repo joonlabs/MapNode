@@ -3,6 +3,7 @@
 namespace App\GraphQL;
 
 use App\GraphQL\Queries\EintragDefinition;
+use App\GraphQL\Queries\KategorienDefinition;
 use App\GraphQL\Queries\MandantDefinition;
 use App\GraphQL\Queries\MandantenDefinition;
 use GraphQL\Fields\GraphQLTypeField;
@@ -24,6 +25,7 @@ class Query
                 MandantenDefinition::get(),
                 MandantDefinition::get(),
                 EintragDefinition::get(),
+                KategorienDefinition::get(),
             ];
         });
     }

@@ -54,6 +54,13 @@ class Mandant extends Definition
                     new GraphQLTypeField(
                         "eintraege",
                         new GraphQLList(new GraphQLNonNull(Eintrag::get())),
+                        resolve: function(\App\Models\Mandant $parent){
+                            return array_map(function($eintrag){
+                                return \App\Models\Eintrag::__createInstanceFromArray($eintrag);
+                            }, \App\Models\Eintrag::where("mandant_id", $parent->id)
+                                ->where("bestaetigt", true)
+                                ->get());
+                        }
                     ),
                     new GraphQLTypeField(
                         "erstellt",

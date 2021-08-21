@@ -7,6 +7,6 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Rewrite all requests to the public/ folder
-    RewriteRule ^(.*)$ /public/ [L]
+    RewriteRule ^(.*)$ /public/$1 [L]
 
 </IfModule>
