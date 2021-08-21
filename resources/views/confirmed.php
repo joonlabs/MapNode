@@ -37,7 +37,7 @@
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
     </div>
-    <span><strong>Ihr Eintrag wurde erfolgreich bestätigt.</strong><br>Sie können diese Seite jetzt schliessen.</span>
+    <span><strong>Ihr Eintrag wurde erfolgreich bestätigt.</strong><br>Sie können diese Seite jetzt schließen.</span>
 </div>
 </body>
 </html>
