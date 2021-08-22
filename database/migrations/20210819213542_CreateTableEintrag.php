@@ -22,6 +22,7 @@ class CreateTableEintrag extends Migration
             $table->string("inhalt")->nullable();
             $table->float("latitude");
             $table->float("longitude");
+            $table->int("mandant_id")->unsigned();
             $table->int("kategorie_id")->unsigned();
             $table->int("buerger_id")->unsigned();
             $table->bool("bestaetigt")->default(false);
@@ -29,6 +30,12 @@ class CreateTableEintrag extends Migration
             $table->timestamp("erstellt")->defaultCurrent();
 
             // foreign keys
+            $table->foreign("mandant_id")
+                ->on("mandant")
+                ->references("id")
+                ->onUpdate(ForeignKeyConstraint::CASCADE)
+                ->onDelete(ForeignKeyConstraint::CASCADE);
+
             $table->foreign("kategorie_id")
                 ->on("kategorie")
                 ->references("id")

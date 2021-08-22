@@ -1,0 +1,133 @@
+body .sidenav{
+    grid-area: menu;
+    background: #ffffff;
+    padding: 38px 30px;
+    transition: all 0.2s ease-in-out, background 1s, color 1s;
+    z-index: 2;
+}
+
+body.darkMode .sidenav{
+    background: var(--background-color-darkmode);
+}
+
+body .menuButton{
+    position: fixed;
+    top: 33px;
+    left: 30px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 3;
+}
+body #navToggler:checked + .sidenav{
+    left: 0;
+}
+body #navTogglerIcon{
+    display: none;
+    transition: all .25s;
+}
+body #navTogglerIcon.rotated{
+    transform: rotate(180deg);
+}
+
+
+body .sidenav .logo{
+    width: 80px;
+}
+body .sidenav .profilepic{
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 17px;
+    width: 80px;
+    height: 80px;
+    background: #dfdfdf;
+    font-size: 30px;
+    letter-spacing: 5px;
+    text-align: center;
+    line-height: 80px;
+}
+body .sidenav .profilename{
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+body .sidenav .menu ul{
+    margin-top: 55px;
+    list-style: none;
+    padding: 0px;
+}
+body .sidenav .menu ul > li.router-link-active, body .sidenav .menu ul > li.router-link-active a{
+    background: var(--accent-color);
+    color: white !important;
+    border-bottom: none;
+}
+body .sidenav .menu ul > li.router-link-active span{
+    color: white;
+}
+body .sidenav .menu ul > li{
+    position: relative;
+    padding: 12px 18px;
+    font-size: 0.85rem;
+    color: rgb(101, 113, 138);
+    cursor: pointer;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    transition: all .2s ease-in-out, background 1s, color 1s;
+}
+body.darkMode .sidenav .menu ul > li{
+    color: #ffffff;
+}
+body .sidenav .menu ul > li a{
+    color: rgb(101, 113, 138);
+    border-bottom: none;
+}
+body .sidenav .menu ul > li:not(.router-link-active):hover{
+    background: #eaeaea;
+}
+body.darkMode .sidenav .menu ul > li:not(.router-link-active):hover{
+    background: rgba(0,0,0,0.35);
+}
+
+body .sidenav .menu ul > li span{
+    margin-right: 12px;
+    font-weight: bold;
+    height: 30px;
+    font-size: 1rem;
+    color: rgb(198, 204, 215);
+}
+body .sidenav .menu ul > li.last {
+    margin-top: 50px;
+}
+
+/**
+Responsive Style
+ */
+@media only screen and (max-width: 1200px)  {
+    body #navTogglerIcon{
+        display: block;
+    }
+
+    body .sidenav{
+        position: fixed;
+        top: 0;
+        left: -300px;
+        width: 270px;
+        height: 100vh;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.2);
+        z-index: 12;
+    }
+
+    body .sidenav.opened{
+        left: 0;
+    }
+
+    body .sidenav .logoHolder{
+        text-align: center;
+    }
+
+    body .sidenav .menu ul{
+        margin-top: 10px;
+    }
+}

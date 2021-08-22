@@ -1,0 +1,117 @@
+#app > div:not(.toast){
+    display: grid;
+    grid-template-areas:
+        "menu topbar topbar"
+        "menu content info"
+        "menu footer footer";
+    grid-template-columns: 270px 2fr 1fr;
+    grid-template-rows: 80px;
+    gap: 100px 30px;
+}
+
+.main{
+    grid-area: content;
+    align-self: start;
+    background: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 13px 42px 6px rgba(170,170,170,0.04);
+    padding: 20px 45px 45px 45px;
+    box-sizing: border-box;
+    transition: background 1s, color 1s, box-shadow 1s;
+}
+
+body.darkMode .main{
+    background: var(--background-color-darkmode);
+    box-shadow: 0 13px 42px 6px rgba(0,0,0,0.04);
+}
+
+#app > div.onlyMainContent:not(.toast){
+    grid-template-areas:
+        "menu topbar topbar"
+        "menu content content"
+        "menu footer footer";
+}
+#app > div.onlyMainContent:not(.toast) .main{
+    margin-right: 40px;
+}
+
+.main.small{
+    grid-area: unset;
+    width: 540px;
+    max-height: 100vh;
+    position: absolute;
+    margin-left: 50%;
+    margin-top: calc(50vh - 65px);
+    transform: translate3d(-50%, -50%, 0);
+}
+
+body.darkMode .info{
+    background: var(--background-color-darkmode);
+    box-shadow: 0 13px 42px 6px rgba(0,0,0,0.04);
+}
+
+.widthController{
+    position: relative;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#topBar{
+    position: relative;
+    grid-area: topbar;
+    background: #ffffff;
+    transition: background 1s, color 1s;
+}
+body.darkMode #topBar{
+    background: var(--background-color-darkmode);
+}
+
+/**
+Responsive Style
+ */
+@media only screen and (max-width: 1200px)  {
+    #app {
+        padding-top: 65px;
+    }
+    #app > div:not(.toast){
+        display: block;
+        padding: 20px;
+    }
+    #app > div:not(.toast) .main{
+        box-shadow: none;
+    }
+    #app > div.onlyMainContent:not(.toast) .main{
+        margin-right: 0 !important;
+    }
+
+    .main{
+        padding: 0 !important;
+        margin-bottom: 80px;
+    }
+
+    .info{
+        box-shadow: none;
+        padding: 0;
+        margin-bottom: 80px;
+        margin-right: 0;
+    }
+}
+
+@media only screen and (max-width: 768px)  {
+    .main.small{
+        grid-area: unset;
+        width: 100%;
+        position: absolute;
+        top: 65px;
+        left: 0;
+        padding: 20px !important;
+        box-sizing: border-box;
+    }
+}
+
+.map {
+    width: 100%;
+    height: 50vh;
+    border: none;
+}
