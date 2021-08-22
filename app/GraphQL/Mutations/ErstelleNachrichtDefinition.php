@@ -8,9 +8,12 @@ use App\GraphQL\Types\Input\NachrichtInput;
 use App\GraphQL\Types\Login;
 use App\GraphQL\Types\Nachricht;
 use App\GraphQL\Utilities\Definition;
+use App\Mail\ConfirmEintrag;
 use App\Models\Benutzer;
+use App\Models\Buerger;
 use Curfle\Auth\JWT\JWT;
 use Curfle\Support\Facades\Auth;
+use Curfle\Support\Facades\Mail;
 use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Errors\BadUserInputError;
 use GraphQL\Fields\GraphQLTypeField;
@@ -37,7 +40,15 @@ class ErstelleNachrichtDefinition extends Definition
                     if ($value === NULL) unset($args["nachricht"][$key]);
 
                 // create entry
-                return \App\Models\Nachricht::create($args["nachricht"]);
+                $nachricht = \App\Models\Nachricht::create($args["nachricht"]);
+
+                // send mail
+                $buerger = Buerger::get($args["nachricht"]["buerger_id"]);
+                Mail::to($buerger->email)
+                    ->send(new ConfirmEintrag(
+                        $buerger->vorname . " " . $buerger->nachname,
+                        env("APP_URL") . "/confirm/nachricht/{$nachricht->id}"
+                    ));
             },
             [
                 new GraphQLFieldArgument("nachricht", new GraphQLNonNull(NachrichtInput::get())),
