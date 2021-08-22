@@ -23,7 +23,7 @@ class ConfirmNachricht extends Mailable
      */
     public function subject(): string
     {
-        return "Bestätigung | MapNode";
+        return "Bestätigung | Nachricht";
     }
 
     /**

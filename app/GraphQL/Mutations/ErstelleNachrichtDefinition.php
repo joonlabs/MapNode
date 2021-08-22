@@ -9,6 +9,7 @@ use App\GraphQL\Types\Login;
 use App\GraphQL\Types\Nachricht;
 use App\GraphQL\Utilities\Definition;
 use App\Mail\ConfirmEintrag;
+use App\Mail\ConfirmNachricht;
 use App\Models\Benutzer;
 use App\Models\Buerger;
 use Curfle\Auth\JWT\JWT;
@@ -45,7 +46,7 @@ class ErstelleNachrichtDefinition extends Definition
                 // send mail
                 $buerger = Buerger::get($args["nachricht"]["buerger_id"]);
                 Mail::to($buerger->email)
-                    ->send(new ConfirmEintrag(
+                    ->send(new ConfirmNachricht(
                         $buerger->vorname . " " . $buerger->nachname,
                         env("APP_URL") . "/confirm/nachricht/{$nachricht->id}"
                     ));
