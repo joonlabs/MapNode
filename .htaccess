@@ -1,12 +1,11 @@
 <IfModule mod_rewrite.c>
+	RewriteEngine On
 
-    RewriteEngine On
+	# Handle Authorization Header
+	RewriteCond %{HTTP:Authorization} .
+	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-    # Rewrite all requests to the public/ folder
-    RewriteRule ^(.*)$ /public/$1 [L]
-
+	# Map request to according file in public directory.
+	RewriteCond %{REQUEST_URI} !^/public/
+	RewriteRule ^(.*)$ /public/$1
 </IfModule>

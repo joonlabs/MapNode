@@ -45,7 +45,7 @@ return [
         /*
          * Curfle Framework Service Providers...
          */
-        Curfle\Filesystem\FilesystemServiceProvider::class,
+        Curfle\FileSystem\FileSystemServiceProvider::class,
         Curfle\Essence\Providers\EssenceServiceProvider::class,
         Curfle\Essence\Providers\ConsoleSupportServiceProvider::class,
         Curfle\Database\DatabaseServiceProvider::class,

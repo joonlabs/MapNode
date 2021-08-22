@@ -2,6 +2,8 @@
 <head>
     <title>MapNode</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
     <!-- ======================================================= -->
     <!--                START MAPNODE EINBINDUNG                 -->
     <!-- ======================================================= -->
@@ -25,6 +27,8 @@
         }
         .swal2-styled.swal2-confirm, .mapNode.button {
             background: #236EFC;
+            display: block;
+            text-align: center;
         }
         .swal2-styled.swal2-confirm:focus, .mapNode.button:focus{
             box-shadow: 0 0 0 3px rgba(35, 110, 252, 0.3);
@@ -93,7 +97,7 @@
             let mapNode = new MapNode({
                 mandantenID: "{{ mandant }}",
                 adressOMatAccessToken: "{{ token }}",
-                apiUrl: "/api/"
+                apiUrl: "/api"
             });
             mapNode.init({
                 container: document.querySelector(".mapNode#container")
@@ -116,6 +120,7 @@
             height: 100vh;
             background: #dfdfdf;
             border-radius: 5px;
+            touch-action: none;
         }
     </style>
 </head>
