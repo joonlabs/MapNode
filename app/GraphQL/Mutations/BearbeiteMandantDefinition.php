@@ -45,7 +45,7 @@ class BearbeiteMandantDefinition extends Definition
                 $mandant = \App\Models\Mandant::get($args["id"]);
 
                 // update values
-                foreach ($args["eintrag"] as $key => $value){
+                foreach ($args["mandant"] as $key => $value){
                     if ($value !== NULL){
                         $mandant->{$key} = $value;
                     }
