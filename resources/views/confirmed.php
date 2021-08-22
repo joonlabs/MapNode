@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Eintrag bestätigt</title>
+    <title>Erfolgreich bestätigt</title>
     <style>
         html, body {
             padding: 0;
@@ -37,7 +37,7 @@
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
     </div>
-    <span><strong>Ihr Eintrag wurde erfolgreich bestätigt.</strong><br>Sie können diese Seite jetzt schließen.</span>
+    <span><strong>{{ subject }} wurde erfolgreich bestätigt.</strong><br>Sie können diese Seite jetzt schließen.</span>
 </div>
 </body>
 </html>

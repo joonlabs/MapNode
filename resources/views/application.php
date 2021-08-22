@@ -18,33 +18,42 @@
     <link rel="stylesheet" href="https://adressomat.de/api/serve/css/autocomplete.css"/>
     <link rel="stylesheet" href="https://adressomat.de/api/serve/css/mapbox-gl.css"/>
     <style>
-        .mapNode, .swal2-container, .adressomat-suggestions{
+        .mapNode, .swal2-container, .adressomat-suggestions {
             font-family: "Tahoma", sans-serif;
             line-height: 1.5em;
         }
-        .swal2-title, .swal2-html-container{
+
+        .swal2-title, .swal2-html-container {
             text-align: left !important;
         }
+
         .swal2-styled.swal2-confirm, .mapNode.button {
             background: #236EFC;
             display: block;
             text-align: center;
         }
-        .swal2-styled.swal2-confirm:focus, .mapNode.button:focus{
+
+        .swal2-styled.swal2-confirm:focus, .mapNode.button:focus {
             box-shadow: 0 0 0 3px rgba(35, 110, 252, 0.3);
         }
-        .swal2-actions{
+        .swal2-styled.swal2-confirm.secondary, .mapNode.button.secondary {
+            background: #898989;
+        }
+
+        .swal2-actions {
             align-items: start;
             justify-content: start;
             margin: 1.25em 22px 0;
         }
-        .mapNode.button{
+
+        .mapNode.button {
             padding: 8px 18px;
             border-radius: 5px;
             color: #fff;
             cursor: pointer;
         }
-        .mapNode.input, textarea.mapNode, select.mapNode{
+
+        .mapNode.input, textarea.mapNode, select.mapNode {
             width: calc(50% - 7px);
             box-sizing: border-box;
             border-radius: 5px;
@@ -56,7 +65,8 @@
             margin-bottom: 12px;
             font-size: 1rem;
         }
-        .mapNode.input.floating{
+
+        .mapNode.input.floating {
             width: 350px;
             max-width: calc(100% - 40px);
             position: absolute;
@@ -64,21 +74,37 @@
             right: 20px;
             z-index: 1;
             padding: 10px 14px;
-            box-shadow: 0 0 40px 8px rgba(0,0,0,0.10);
+            box-shadow: 0 0 40px 8px rgba(0, 0, 0, 0.10);
 
         }
-        .swal2-html-container b{
+
+        .swal2-html-container b {
             display: block;
             margin-bottom: 12px;
             margin-top: 12px;
         }
-        .mapNode.input.bigger{ width: calc(70% - 7px); }
-        .mapNode.input.smaller{ width: calc(30% - 7px); }
-        .mapNode.input.full, textarea.mapNode.full, select.mapNode.full{ width: calc(100% - 7px); }
-        .mapNode.input:focus{
+
+        .mapNode.input.bigger {
+            width: calc(70% - 7px);
+        }
+
+        .mapNode.input.smaller {
+            width: calc(30% - 7px);
+        }
+
+        .mapNode.input.half {
+            width: calc(50% - 7px);
+        }
+
+        .mapNode.input.full, textarea.mapNode.full, select.mapNode.full {
+            width: calc(100% - 7px);
+        }
+
+        .mapNode.input:focus {
             border: 3px solid #236EFC;
         }
-        .marker{
+
+        .marker {
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -90,10 +116,31 @@
             padding: 8px;
             box-sizing: border-box;
         }
+
+        .mapNode.message {
+            width: 80%;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
+            background: #dfdfdf;
+            padding: 20px;
+            margin-right: 50px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .mapNode.message .from {
+            margin-top: 5px;
+            display: block;
+            width: 100%;
+            font-size: 0.75rem;
+            color: #757575;
+        }
     </style>
 
     <script>
-        window.addEventListener("load", function(){
+        window.addEventListener("load", function () {
             let mapNode = new MapNode({
                 mandantenID: "{{ mandant }}",
                 adressOMatAccessToken: "{{ token }}",
@@ -110,11 +157,12 @@
     <!-- ======================================================= -->
 
     <style>
-        body, html{
+        body, html {
             padding: 0;
             margin: 0;
         }
-        .mapNode#container{
+
+        .mapNode#container {
             position: relative;
             width: 100%;
             height: 100vh;
@@ -126,7 +174,8 @@
 </head>
 <body>
 <div class="mapNode" id="container">
-    <input class="mapNode input floating" type="search" adressomat-autocomplete="name" adressomat-autofill="attributes.street" placeholder="Nach Adresse suchen">
+    <input class="mapNode input floating" type="search" adressomat-autocomplete="name"
+           adressomat-autofill="attributes.street" placeholder="Nach Adresse suchen">
     <!-- Hier wird die MapNode Anwendung geladen -->
 </div>
 </body>

@@ -25,7 +25,7 @@ Route::get("/mapnode/{mandant}/{token}", function (Request $request) {
 /**
  * Confirming entries, which were created by the GraphQL api.
  */
-Route::get("/confirm/{id}", function (Request $request) {
+Route::get("/confirm/eintrag/{id}", function (Request $request) {
     // obtain entry
     $eintrag = \App\Models\Eintrag::get($request->input("id"));
 
@@ -38,7 +38,30 @@ Route::get("/confirm/{id}", function (Request $request) {
     $eintrag->update();
 
     // return view
-    return view("confirmed");
+    return view("confirmed", [
+        "subject" => "Ihr Eintrag"
+    ]);
+})->where("id", "[0-9]+");
+
+/**
+ * Confirming messages, which were created by the GraphQL api.
+ */
+Route::get("/confirm/nachricht/{id}", function (Request $request) {
+    // obtain entry
+    $nachricht = \App\Models\Nachricht::get($request->input("id"));
+
+    // check if entry exists
+    if ($nachricht === null)
+        abort(404, "Not found");
+
+    // update entry
+    $nachricht->bestaetigt = true;
+    $nachricht->update();
+
+    // return view
+    return view("confirmed", [
+        "subject" => "Ihre Nachricht"
+    ]);
 })->where("id", "[0-9]+");
 
 /**

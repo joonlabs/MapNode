@@ -20,7 +20,7 @@ class MapNode {
             key: this.adressOMatAccessToken,
             callbacks: { //optional (is default)
                 "clickResult": function (data) {
-                    if(data.data.coordinates.lat !== null && data.data.coordinates.long !== null)
+                    if (data.data.coordinates.lat !== null && data.data.coordinates.long !== null)
                         _this._setNewMarker(data)
                 }
             },
@@ -46,19 +46,143 @@ class MapNode {
         })
 
         for (let eintrag of this.mandant.eintraege) {
+            let randomId = "button_" + Math.random().toString(36).substr(2)
             let marker = this.map.Marker({
                 latitude: eintrag.latitude,
                 longitude: eintrag.longitude,
             }).setPopup({
                 content: "<h3>" + eintrag.name + "</h3>" +
                     // "<span>" + eintrag.inhalt + "</span>" +
-                    "<div class='mapNode button'>Details ansehen</div>",
+                    "<div class='mapNode button' id='" + randomId + "'>Details ansehen</div>",
                 offset: [0, -30]
             }).render({
                 map: this.map
             })
             // set color
             marker.marker._element.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 24 24\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" xmlns:serif=\"http://www.serif.com/\" fill=\"%23" + eintrag.kategorie.farbe.substr(1) + "\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;\"><path d=\"M22,10C22,4.514 17.486,-0 12,0C6.514,0 2,4.514 2,10C2,13.025 3.52,15.891 5.387,18.225C8.079,21.59 11.445,23.832 11.445,23.832C11.781,24.056 12.219,24.056 12.555,23.832C12.555,23.832 15.921,21.59 18.613,18.225C20.48,15.891 22,13.025 22,10ZM12,6C9.792,6 8,7.792 8,10C8,12.208 9.792,14 12,14C14.208,14 16,12.208 16,10C16,7.792 14.208,6 12,6Z\"/></svg>')"
+
+            marker.marker.getElement().addEventListener('click', () => {
+                setTimeout(() => {
+                    console.log(document.querySelector("#" + randomId))
+                    document.querySelector("#" + randomId).onclick = async function () {
+                        // create buerger
+                        let eintragData = (await _this._api({
+                            query: `query get($id:Int!){
+                                    eintrag(id: $id){
+                                        id
+                                        name
+                                        status
+                                        inhalt
+                                        kategorie{
+                                            name
+                                            farbe
+                                        }
+                                        buerger{
+                                            vorname
+                                            nachname
+                                        }
+                                        nachrichten{
+                                            buerger{
+                                                vorname
+                                                nachname
+                                            }
+                                            bestaetigt
+                                            erstellt
+                                            inhalt
+                                        }
+                                        chat_verfuegbar
+                                        erstellt
+                                    }
+                                }`,
+                            variables: {
+                                id: eintrag.id
+                            }
+                        })).data.eintrag
+
+                        // display entry
+                        Swal.fire({
+                            title: eintragData.name,
+                            confirmButtonText: "Eintrag schliessen",
+                            html:
+                                '<b>Inhalt:</b>' +
+                                '<span>' + (eintragData.inhalt ?? "").replaceAll("\n", "<br>") + '</span>' +
+                                '<b>Kategorie:</b>' +
+                                '<span style="color: ' + eintragData.kategorie.farbe + '">' + eintragData.kategorie.name + '</span>' +
+                                '<b>Erstellt:</b>' +
+                                '<span>' + eintragData.erstellt + '</span>' +
+                                '<b>Nachrichten:</b>' +
+                                _this._renderMessages({messages: eintragData.nachrichten})+
+                                '<div class="mapNode button secondary" id="sendMessage">Neue Nachricht schreiben</div>'
+                        })
+
+                        document.querySelector("#sendMessage").onclick = async function(){
+                            const {value: formValues} = await Swal.fire({
+                                title: "Neue Nachricht schreiben",
+                                html:
+                                    '<b>Persönliche Informationen</b>' +
+                                    '<input id="vorname" class="mapNode input half" placeholder="Vorname*">' +
+                                    '<input id="nachname" class="mapNode input half" placeholder="Nachname*">' +
+                                    '<input id="email" class="mapNode input full" placeholder="E-Mail*">' +
+                                    '<b>Nachricht:</b>' +
+                                    '<textarea id="textarea" rows="8" class="mapNode input full" placeholder="Inhalt*"></textarea>',
+                                focusConfirm: false,
+                                confirmButtonText: "Nachricht senden",
+                                preConfirm: () => {
+                                    let data = {
+                                        vorname: document.getElementById('vorname').value.trim(),
+                                        nachname: document.getElementById('nachname').value.trim(),
+                                        email: document.getElementById('email').value.trim(),
+                                        inhalt: document.getElementById('textarea').value.trim(),
+                                    }
+
+                                    // validate data
+                                    if (data.vorname === "" || data.nachname === "" || data.email === "" || data.inhalt === "") {
+                                        alert("Bitte füllen Sie alle benötigten Felder aus.")
+                                        return false
+                                    }
+
+                                    return data
+                                }
+                            })
+
+                            // create buerger
+                            let buergerId = (await _this._api({
+                                query: `mutation create($buerger: BuergerInput!){
+                                    erstelleBuerger(buerger: $buerger){
+                                        id
+                                    }
+                                }`,
+                                variables: {
+                                    buerger: {
+                                        vorname: formValues.vorname,
+                                        nachname: formValues.nachname,
+                                        email: formValues.email,
+                                    }
+                                }
+                            })).data.erstelleBuerger.id
+
+                            // create nachricht
+                            await _this._api({
+                                query: `mutation create($nachricht: NachrichtInput!){
+                                    erstelleNachricht(nachricht: $nachricht){
+                                        id
+                                    }
+                                }`,
+                                variables: {
+                                    nachricht: {
+                                        eintrag_id: eintrag.id,
+                                        buerger_id: buergerId,
+                                        inhalt: formValues.inhalt,
+                                    }
+                                }
+                            })
+
+                            _this._showMessageSuccessPopUp()
+                        }
+                    }
+                }, 150)
+            })
+
         }
 
         // enable klick on map
@@ -67,7 +191,7 @@ class MapNode {
             event: "click",
             handler: function (event) {
                 // only use clicks on the canvas not on other elements like markers
-                if(event.originalEvent.target.tagName !== "CANVAS")
+                if (event.originalEvent.target.tagName !== "CANVAS")
                     return false
 
                 // create new marker
@@ -93,10 +217,10 @@ class MapNode {
                     karte_longitude
                     karte_zoom
                     eintraege{
+                        id
                         name
                         latitude
                         longitude
-                        inhalt
                         kategorie{
                             name
                             farbe
@@ -107,6 +231,20 @@ class MapNode {
             variables: {id: this.mandantenID}
         })).data.mandant
     }
+
+    _renderMessages({messages} = {}) {
+        let html = ""
+
+        for(let message of messages){
+            if(!message.bestaetigt)
+                continue
+
+            html += "<div class='mapNode message'>" + message.inhalt.replaceAll("\n", "<br>") + "<span class='from'>" + message.buerger.vorname.substr(0, 1) + ". " + message.buerger.nachname + " | " + message.erstellt + "</span></div>"
+        }
+
+        return html
+    }
+
 
     /**
      * Sets a new grey marker.
@@ -140,8 +278,8 @@ class MapNode {
 
         // remove marker on close
         let markerClosed = false
-        marker.marker._popup.on("close", function(){
-            if(markerClosed) return
+        marker.marker._popup.on("close", function () {
+            if (markerClosed) return
             markerClosed = true
             marker.remove()
         })
@@ -283,7 +421,15 @@ class MapNode {
         Swal.fire({
             icon: "success",
             title: "Eintrag angelegt",
-            html: "<strong>Bestätigen</strong> Sie bitte die Erstellung Ihres Eintrags, indem Sie auf den <strong>Link in der Bestätigungs-E-Mail</strong> klicken."
+            html: "<strong>Bestätigen</strong> Sie bitte die Erstellung Ihres Eintrags, indem Sie auf den <strong>Link in der Bestätigungs-E-Mail</strong> klicken, welche wir Ihnen soeben zugesandt haben."
+        })
+    }
+
+    _showMessageSuccessPopUp() {
+        Swal.fire({
+            icon: "success",
+            title: "Nachricht erstellt",
+            html: "<strong>Bestätigen</strong> Sie bitte den Versandt Ihrer Nachricht, indem Sie auf den <strong>Link in der Bestätigungs-E-Mail</strong> klicken, welche wir Ihnen soeben zugesandt haben."
         })
     }
 
