@@ -13,6 +13,8 @@
 
 <script>
 
+import {jUser} from "@/js/jUser";
+
 export default {
   name: "Login",
   methods: {
@@ -25,11 +27,8 @@ export default {
       let email = document.getElementById("email").value
       let password = document.getElementById("password").value
 
-      //TODO Login
-
       // check for email
       if(email.trim()===""){
-
         return
       }
 
@@ -37,7 +36,7 @@ export default {
       if(password.trim()===""){
         return
       }
-      return 0
+      jUser.logIn({email: email, password: password})
     }
   }
 }
