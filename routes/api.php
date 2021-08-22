@@ -70,4 +70,4 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
         }
     ");
 })->where("mandant", "[0-9]+")
-    ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|)+");
+    ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|\-)+");

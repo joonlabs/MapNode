@@ -17,7 +17,7 @@ window.topbar = {
 window.config = {
     url: "http://localhost:8080",
     api : {
-        endpoint : "http://localhost:8080/api",
+        endpoint : "/api",
         apiVersion: "1.0",
         lang : "de"
     },

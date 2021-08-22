@@ -84,9 +84,9 @@ Route::get('/{uri}', function (Request $request, Response $response, FileSystem 
     if ($files->exists($file)) {
         $content = $files->get($file);
         $response->setHeader("Content-Type", $files->contentType($file));
-        return $content;
     } else {
-        throw new NotFoundHttpException("Not found", 404);
+        $content = $files->get(__DIR__ . "/../public/vue/dist/index.html");
     }
+    return $content;
 
 })->where("uri", ".*");
