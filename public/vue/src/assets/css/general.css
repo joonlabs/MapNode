@@ -339,3 +339,10 @@ body.darkMode .helpButton {
         grid-template-columns: 1fr;
     }
 }
+code {
+    background-color: #DFDFDF;
+    border-radius: 12px;
+    padding: 9px;
+    display: block;
+    margin: 12px 0;
+}

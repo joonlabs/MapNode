@@ -39,8 +39,8 @@
       </div>
       <div class="button mT" @click="updateClient"><span class="icon-check"></span>Mandant aktualisieren</div>
       <!-- Map -->
-      <div id="map"><iframe class ="map" :src="'http://localhost:8080/mapnode/' + client.id + '/' + key"></iframe></div>
-      <div>&lt;iframe class ="map" :src="{{url}}/mapnode/{{client.id}}/{{key}}&gt;</div>
+      <code>&lt;iframe class="map" src="{{url}}/mapnode/{{client.id}}/{{key}}"&gt;</code>
+      <div id="map"><iframe class ="map" :src="url + '/mapnode/' + client.id + '/' + key"></iframe></div>
 
     </div>
   </div>
