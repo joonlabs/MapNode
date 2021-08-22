@@ -1,6 +1,8 @@
 <?php
 
 use Curfle\Http\Request;
+use Curfle\Http\Response;
+use Curfle\Support\Facades\Auth;
 use Curfle\Support\Facades\Route;
 
 /**
@@ -13,3 +15,59 @@ Route::methods([Route::POST, Route::OPTIONS], '/', function (Request $request) {
     $server->setInternalServerErrorPrint(config("app.debug"));
     return $server->handle();
 });
+
+Route::get("/download/{mandant}/{token}", function (Request $request, Response $response) {
+    // get parameters
+    $mandant = intval($request->input("mandant"));
+    $token = $request->input("token");
+
+    // validate request
+    $request->setHeaders(array_merge($request->headers(), ["Authorization" => "Bearer $token"]));
+    if(!Auth::validate($request))
+        abort(403, "Access denied");
+
+    // get data and download as json
+    $server = new \GraphQL\Servers\Server(\App\GraphQL\Schema::get());
+    $server->setInternalServerErrorPrint(config("app.debug"));
+    $filename = "mandant_{$mandant}_" . time();
+    $response->setHeader("Content-disposition", "attachment; filename=$filename.json");
+    return $server->handle("
+        {
+            mandant(id:$mandant){
+                eintraege{
+                    id
+                    name
+                    inhalt
+                    latitude
+                    longitude
+                    kategorie{
+                        name
+                        farbe
+                    }
+                    buerger{
+                        vorname
+                        nachname
+                        email
+                        strasse
+                        hausnummer
+                        stadt
+                        plz
+                    }
+                    nachrichten{
+                        inhalt
+                        buerger{
+                            vorname
+                            nachname
+                            email
+                        }
+                        bestaetigt
+                        erstellt
+                    }
+                    bestaetigt
+                    erstellt
+                }
+            }
+        }
+    ");
+})->where("mandant", "[0-9]+")
+    ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|)+");
