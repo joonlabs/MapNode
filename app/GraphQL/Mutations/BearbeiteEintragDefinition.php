@@ -6,7 +6,7 @@ use App\GraphQL\Types\Eintrag;
 use App\GraphQL\Types\Input\EintragInput;
 use App\GraphQL\Types\Login;
 use App\GraphQL\Utilities\Definition;
-use App\Mail\ConfirmEntry;
+use App\Mail\ConfirmEintrag;
 use App\Models\Benutzer;
 use Curfle\Auth\JWT\JWT;
 use Curfle\Http\Request;

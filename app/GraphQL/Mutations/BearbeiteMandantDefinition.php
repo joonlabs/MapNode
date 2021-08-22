@@ -18,10 +18,11 @@ use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Errors\BadUserInputError;
 use GraphQL\Errors\UnauthenticatedError;
 use GraphQL\Fields\GraphQLTypeField;
+use GraphQL\Types\GraphQLInt;
 use GraphQL\Types\GraphQLNonNull;
 use GraphQL\Types\GraphQLString;
 
-class ErstelleMandantDefinition extends Definition
+class BearbeiteMandantDefinition extends Definition
 {
 
     static ?object $instance = null;
@@ -32,25 +33,29 @@ class ErstelleMandantDefinition extends Definition
     public static function build(): object
     {
         return new GraphQLTypeField(
-            "erstelleMandant",
+            "bearbeiteMandant",
             Mandant::get(),
-            "Erstellt einen neuen Mandant",
+            "Bearbeitet einen Mandant",
             function ($_, $args) {
                 // validate request
                 if(!Auth::validate(Request::capture()))
                     throw new UnauthenticatedError("Missing or invalid token.");
 
-                // remove null inputs
-                foreach ($args["mandant"] as $key => $value)
-                    if ($value === NULL) unset($args["mandant"][$key]);
+                // obtain entry
+                $mandant = \App\Models\Mandant::get($args["id"]);
 
-                // create field "kennung"
-                $args["mandant"]["kennung"] = bin2hex(random_bytes(25));
+                // update values
+                foreach ($args["eintrag"] as $key => $value){
+                    if ($value !== NULL){
+                        $mandant->{$key} = $value;
+                    }
+                }
 
-                // create entry
-                return \App\Models\Mandant::create($args["mandant"]);
+                // update entry
+                return $mandant->update();
             },
             [
+                new GraphQLFieldArgument("id", new GraphQLNonNull(new GraphQLInt())),
                 new GraphQLFieldArgument("mandant", new GraphQLNonNull(MandantInput::get())),
             ]
         );

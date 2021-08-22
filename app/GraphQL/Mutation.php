@@ -3,6 +3,7 @@
 namespace App\GraphQL;
 
 use App\GraphQL\Mutations\BearbeiteEintragDefinition;
+use App\GraphQL\Mutations\BearbeiteMandantDefinition;
 use App\GraphQL\Mutations\ErstelleBuergerDefinition;
 use App\GraphQL\Mutations\ErstelleEintragDefinition;
 use App\GraphQL\Mutations\ErstelleMandantDefinition;
@@ -32,7 +33,8 @@ class Mutation
                 ErstelleBuergerDefinition::get(),
                 ErstelleNachrichtDefinition::get(),
                 ErstelleMandantDefinition::get(),
-                BearbeiteEintragDefinition::get()
+                BearbeiteEintragDefinition::get(),
+                BearbeiteMandantDefinition::get(),
             ];
         });
     }

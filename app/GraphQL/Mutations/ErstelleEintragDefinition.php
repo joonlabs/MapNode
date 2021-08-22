@@ -6,7 +6,7 @@ use App\GraphQL\Types\Eintrag;
 use App\GraphQL\Types\Input\EintragInput;
 use App\GraphQL\Types\Login;
 use App\GraphQL\Utilities\Definition;
-use App\Mail\ConfirmEntry;
+use App\Mail\ConfirmEintrag;
 use App\Models\Benutzer;
 use App\Models\Buerger;
 use Curfle\Auth\JWT\JWT;
@@ -45,9 +45,9 @@ class ErstelleEintragDefinition extends Definition
                 // send mail
                 $buerger = Buerger::get($args["eintrag"]["buerger_id"]);
                 Mail::to($buerger->email)
-                    ->send(new ConfirmEntry(
+                    ->send(new ConfirmEintrag(
                         $buerger->vorname . " " . $buerger->nachname,
-                        env("APP_URL") . "/confirm/{$eintrag->id}"
+                        env("APP_URL") . "/confirm/eintrag/{$eintrag->id}"
                     ));
 
                 // return entry
