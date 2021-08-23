@@ -114,7 +114,7 @@ export default {
     },
     exportClient() {
       let _this = this
-      window.location.href = window.config.api.endpoint + "/download/" + _this.client.id + "/" + jUser.getToken()
+      window.location.href = window.config.url + window.config.api.endpoint + "/download/" + _this.client.id + "/" + jUser.getToken()
     },
     /*
     deleteClient() {
