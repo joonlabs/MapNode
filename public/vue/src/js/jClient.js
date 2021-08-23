@@ -12,7 +12,7 @@ export class jClient {
                     headers: {
                         Authorization: "Bearer " + jUser.getToken()
                     },
-                    url: window.config.api.endpoint,
+                    url: window.config.url + window.config.api.endpoint,
                     data: {
                         query: `mutation {
                                 erstelleMandant(mandant: {name:"${name}", karte_latitude: ${lat}, karte_longitude: ${long}, karte_zoom: ${zoom}}){
@@ -44,7 +44,7 @@ export class jClient {
                     headers: {
                         Authorization: "Bearer " + jUser.getToken()
                     },
-                    url: window.config.api.endpoint,
+                    url: window.config.url + window.config.api.endpoint,
                     data: {
                         query: `
                             {
@@ -82,7 +82,7 @@ export class jClient {
                     headers: {
                         Authorization: "Bearer " + jUser.getToken()
                     },
-                    url: window.config.api.endpoint,
+                    url: window.config.url + window.config.api.endpoint,
                     data: {
                         query: `
                             {
@@ -126,7 +126,7 @@ export class jClient {
                     headers: {
                         Authorization: "Bearer " + jUser.getToken()
                     },
-                    url: window.config.api.endpoint,
+                    url: window.config.url + window.config.api.endpoint,
                     data: {
                         query: `mutation {
                                 bearbeiteMandant(id:${id} , mandant: { name:"${name}", karte_latitude: ${lat}, karte_longitude: ${long}, karte_zoom: ${zoom}}){
@@ -159,7 +159,7 @@ export class jClient {
                     headers: {
                         Authorization: "Bearer " + jUser.getToken()
                     },
-                    url: window.config.api.endpoint,
+                    url: window.config.url + window.config.api.endpoint,
                     data: {
                         query: `mutation {
                                 loescheMandant(id:${id}){

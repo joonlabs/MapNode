@@ -17,7 +17,7 @@ export class jUser {
         return new Promise(function (resolve, reject) {
             axios({
                 method: "POST",
-                url: window.config.api.endpoint,
+                url: window.config.url + window.config.api.endpoint,
                 data: {
                     query: `mutation {
                                 login( email: "${email}", passwort: "${password}"){

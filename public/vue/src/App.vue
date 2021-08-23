@@ -18,7 +18,7 @@ export default {
 @import './assets/css/button.css';
 @import './assets/css/icons.css';
 @import './assets/css/sidenav.css';
-@import '../node_modules/tabulator-tables/dist/css/tabulator_simple.css';
+@import './assets/css/tabulator.css';
 
 :root {
   --background-color: rgb(254, 254, 254);
