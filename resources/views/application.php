@@ -42,6 +42,10 @@
             margin: 0;
         }
 
+        .mapNode, .swal2-container, .adressomat-suggestions {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
         /**
         DIESER TEIL IST OPTIONAL - EIN STYLE FÜR DEN CONTAINER WIRD ALLERDINGS BENÖTIGT
          */

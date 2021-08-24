@@ -35,8 +35,21 @@ Route::get("/confirm/eintrag/{id}", function (Request $request) {
         abort(404, "Not found");
 
     // update entry
-    $eintrag->bestaetigt = true;
-    $eintrag->update();
+    if(!$eintrag->bestaetigt){
+        // update the db
+        $eintrag->bestaetigt = true;
+        $eintrag->update();
+
+        // inform root user
+        $link = env("APP_URL") . "/mapnode/{$eintrag->mandant->id}/" . env("ADRESSOMAT_TOKEN");
+        $root = \App\Models\Benutzer::get(1);
+        $mandant = $eintrag->mandant;
+        Mail::to($root->email)
+            ->send(new \App\Mail\NotifiyRoot(
+                "Ein neuer Eintrag \"{$eintrag->name}\" wurde für den Mandanten \"{$mandant->name}\" erstellt.",
+                $link
+            ));
+    }
 
     // return view
     return view("confirmed", [
@@ -99,6 +112,15 @@ Route::get("/confirm/nachricht/{id}", function (Request $request) {
                     ));
             }
         }
+
+        // inform root user
+        $root = \App\Models\Benutzer::get(1);
+        $mandant = $eintrag->mandant;
+        Mail::to($root->email)
+            ->send(new \App\Mail\NotifiyRoot(
+                "Eine neue Nachricht wurde im Eintrag \"{$eintrag->name}\" für den Mandanten \"{$mandant->name}\" erstellt.",
+                $link
+            ));
     }
 
 
