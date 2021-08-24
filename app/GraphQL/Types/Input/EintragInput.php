@@ -71,6 +71,10 @@ class EintragInput extends Definition
                         "chat_verfuegbar",
                         new GraphQLBoolean(),
                     ),
+                    new GraphQLTypeField(
+                        "nachricht_bei_interaktion",
+                        new GraphQLBoolean(),
+                    ),
                 ];
             });
     }

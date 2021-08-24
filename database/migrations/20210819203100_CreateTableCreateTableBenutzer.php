@@ -23,7 +23,7 @@ class CreateTableBenutzer extends Migration
             $table->string("email", 250);
             $table->string("passwort", 100);
             $table->int("benutzerrolle"); // 1=root, 2=admin
-            $table->timestamp("erstellt")->defaultCurrent();
+            $table->datetime("erstellt")->defaultCurrent();
 
             // foreign key
             $table->foreign("mandant_id")

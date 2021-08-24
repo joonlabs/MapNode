@@ -43,6 +43,14 @@ class NachrichtInput extends Definition
                         "inhalt",
                         new GraphQLNonNull(new GraphQLString()),
                     ),
+                    new GraphQLTypeField(
+                        "namen_veroeffentlichen",
+                        new GraphQLBoolean(),
+                    ),
+                    new GraphQLTypeField(
+                        "nachricht_bei_interaktion",
+                        new GraphQLBoolean(),
+                    ),
                 ];
             });
     }

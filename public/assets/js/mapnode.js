@@ -89,6 +89,7 @@ class MapNode {
                                             bestaetigt
                                             erstellt
                                             inhalt
+                                            namen_veroeffentlichen
                                         }
                                         chat_verfuegbar
                                         erstellt
@@ -111,20 +112,27 @@ class MapNode {
                                 '<b>Erstellt:</b>' +
                                 '<span>' + eintragData.erstellt + '</span>' +
                                 '<b>Nachrichten:</b>' +
-                                _this._renderMessages({messages: eintragData.nachrichten})+
+                                _this._renderMessages({messages: eintragData.nachrichten}) +
                                 '<div class="mapNode button secondary" id="sendMessage">Neue Nachricht schreiben</div>'
                         })
 
-                        document.querySelector("#sendMessage").onclick = async function(){
+                        document.querySelector("#sendMessage").onclick = async function () {
                             const {value: formValues} = await Swal.fire({
                                 title: "Neue Nachricht schreiben",
                                 html:
                                     '<b>Persönliche Informationen</b>' +
                                     '<input id="vorname" class="mapNode input half" placeholder="Vorname*">' +
                                     '<input id="nachname" class="mapNode input half" placeholder="Nachname*">' +
-                                    '<input id="email" class="mapNode input full" placeholder="E-Mail*">' +
+                                    '<input id="email" class="mapNode input full" type="email" placeholder="E-Mail*">' +
                                     '<b>Nachricht:</b>' +
-                                    '<textarea id="textarea" rows="8" class="mapNode input full" placeholder="Inhalt*"></textarea>',
+                                    '<textarea id="textarea" rows="8" class="mapNode input full" placeholder="Inhalt*"></textarea>' +
+                                    '<b>Einstellungen:</b>' +
+                                    '<input type="checkbox" id="nachrichtenInteraktion"> <label for="nachrichtenInteraktion"> E-Mails an mich bei neuen Nachrichten senden</label><br>' +
+                                    '<input type="checkbox" id="namenVeroeffentlichen"> <label for="namenVeroeffentlichen"> Meinen Namen als Absender veröffentlichen</label><br><br>' +
+                                    '<span><strong>Datenschutz:</strong><br>' +
+                                    'Ihre Daten werden lediglich zur Bearbeitung Ihrer Anfrage verwendet und Ihre personenbezogene Daten nach Datenschutzeregelungen behandelt.<br><br> ' +
+                                    '<strong>Verifizierung:</strong><br>' +
+                                    'Bitte geben Sie Ihre E-Mail-Adresse ein. Erst nach dieser Bestätigung wird Ihr Beitrag veröffentlicht.</span>',
                                 focusConfirm: false,
                                 confirmButtonText: "Nachricht senden",
                                 preConfirm: () => {
@@ -133,7 +141,11 @@ class MapNode {
                                         nachname: document.getElementById('nachname').value.trim(),
                                         email: document.getElementById('email').value.trim(),
                                         inhalt: document.getElementById('textarea').value.trim(),
+                                        nachrichtenInteraktion: document.getElementById('nachrichtenInteraktion').checked,
+                                        namenVeroeffentlichen: document.getElementById('namenVeroeffentlichen').checked,
                                     }
+
+                                    console.log(data)
 
                                     // validate data
                                     if (data.vorname === "" || data.nachname === "" || data.email === "" || data.inhalt === "") {
@@ -173,6 +185,8 @@ class MapNode {
                                         eintrag_id: eintrag.id,
                                         buerger_id: buergerId,
                                         inhalt: formValues.inhalt,
+                                        nachricht_bei_interaktion: formValues.nachrichtenInteraktion,
+                                        namen_veroeffentlichen: formValues.namenVeroeffentlichen,
                                     }
                                 }
                             })
@@ -235,11 +249,18 @@ class MapNode {
     _renderMessages({messages} = {}) {
         let html = ""
 
-        for(let message of messages){
-            if(!message.bestaetigt)
+        for (let message of messages) {
+            if (!message.bestaetigt)
                 continue
 
-            html += "<div class='mapNode message'>" + message.inhalt.replaceAll("\n", "<br>") + "<span class='from'>" + message.buerger.vorname.substr(0, 1) + ". " + message.buerger.nachname + " | " + message.erstellt + "</span></div>"
+            html += "<div class='mapNode message'>"
+                + message.inhalt.replaceAll("\n", "<br>")
+                + "<span class='from'>"
+                + (message.namen_veroeffentlichen
+                    ? message.buerger.vorname.substr(0, 1) + ". " + message.buerger.nachname + " | "
+                    : "")
+                + message.erstellt
+                + "</span></div>"
         }
 
         return html
@@ -254,6 +275,11 @@ class MapNode {
      */
     _setNewMarker({data} = {}) {
         let _this = this
+
+        // close hint
+        document.querySelector("#mapNodeHint").style.display = "none"
+
+        // render maker
         let randomId = "button_" + Math.random().toString(36).substr(2)
         let marker = this.map.Marker({
             latitude: data.coordinates.lat,
@@ -273,7 +299,7 @@ class MapNode {
             latitude: data.coordinates.lat,
             longitude: data.coordinates.long,
             zoom: 18,
-            maxDuration: 2500
+            maxDuration: 1500
         })
 
         // remove marker on close
@@ -300,10 +326,10 @@ class MapNode {
                         vorname: formData.vorname,
                         nachname: formData.nachname,
                         email: formData.email,
-                        strasse: formData.strasse === "" ? null : formData.strasse,
-                        hausnummer: formData.strasse === "" ? null : formData.hausnummer,
-                        stadt: formData.stadt === "" ? null : formData.stadt,
-                        plz: formData.plz === "" ? null : formData.plz,
+                        strasse: null,
+                        hausnummer: null,
+                        stadt: null,
+                        plz: null,
                     }
                 }
             })).data.erstelleBuerger.id
@@ -334,6 +360,7 @@ class MapNode {
                         longitude: data.coordinates.long,
                         mandant_id: _this.mandantenID,
                         kategorie_id: formData.kategorie,
+                        nachricht_bei_interaktion: formData.nachrichtenInteraktion,
                         buerger_id: buergerId,
                     }
                 }
@@ -358,28 +385,35 @@ class MapNode {
                 '<input id="vorname" class="mapNode input" placeholder="Vorname*">' +
                 '<input id="nachname" class="mapNode input" placeholder="Nachname*">' +
                 '<input id="email" class="mapNode input full" type="email" placeholder="E-Mail*">' +
-                '<input id="strasse" class="mapNode input bigger" placeholder="Straße">' +
-                '<input id="hausnummer" class="mapNode input smaller" placeholder="Hausnummer">' +
-                '<input id="plz" class="mapNode input smaller" type="tel" placeholder="PLZ">' +
-                '<input id="stadt" class="mapNode input bigger" placeholder="Stadt">' +
+                // '<input id="strasse" class="mapNode input bigger" placeholder="Straße">' +
+                // '<input id="hausnummer" class="mapNode input smaller" placeholder="Hausnummer">' +
+                // '<input id="plz" class="mapNode input smaller" type="tel" placeholder="PLZ">' +
+                // '<input id="stadt" class="mapNode input bigger" placeholder="Stadt">' +
                 '<br><b>Informationen über den Eintrag</b>' +
                 await _this._buildSelectKategorien() +
                 '<input id="name" class="mapNode input full" placeholder="Titel*">' +
-                '<textarea class="mapNode full" placeholder="Beschreibung" id="inhalt"></textarea>',
+                '<textarea class="mapNode full" placeholder="Beschreibung" id="inhalt"></textarea>' +
+                '<b>Einstellungen:</b>' +
+                '<input type="checkbox" id="nachrichtenInteraktion"> <label for="nachrichtenInteraktion"> E-Mails an mich bei neuen Nachrichten senden</label><br><br>' +
+                '<span><strong>Datenschutz:</strong><br>' +
+                'Ihre Daten werden lediglich zur Bearbeitung Ihrer Anfrage verwendet und Ihre personenbezogene Daten nach Datenschutzeregelungen behandelt.<br><br> ' +
+                '<strong>Verifizierung:</strong><br>' +
+                'Bitte geben Sie Ihre E-Mail-Adresse ein. Erst nach dieser Bestätigung wird Ihr Beitrag veröffentlicht.</span>',
             focusConfirm: false,
             confirmButtonText: "Eintrag anlegen",
             preConfirm: () => {
                 let data = {
                     vorname: document.getElementById('vorname').value.trim(),
                     nachname: document.getElementById('nachname').value.trim(),
-                    strasse: document.getElementById('strasse').value.trim(),
-                    hausnummer: document.getElementById('hausnummer').value.trim(),
-                    stadt: document.getElementById('stadt').value.trim(),
-                    plz: parseInt(document.getElementById('plz').value.trim()),
+                    strasse: null,
+                    hausnummer: null,
+                    stadt: null,
+                    plz: null,
                     email: document.getElementById('email').value.trim(),
                     kategorie: parseInt(document.getElementById('kategorie').value.trim()),
                     name: document.getElementById('name').value.trim(),
                     inhalt: document.getElementById('inhalt').value.trim(),
+                    nachrichtenInteraktion: document.getElementById('nachrichtenInteraktion').checked,
                 }
 
                 // validate data

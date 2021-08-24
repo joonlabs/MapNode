@@ -21,7 +21,7 @@ class CreateTableMandant extends Migration
             $table->float("karte_latitude");
             $table->float("karte_longitude");
             $table->int("karte_zoom")->default(11);
-            $table->timestamp("erstellt")->defaultCurrent();
+            $table->datetime("erstellt")->defaultCurrent();
         });
     }
 

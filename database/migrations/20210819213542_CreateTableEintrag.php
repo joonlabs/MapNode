@@ -27,7 +27,8 @@ class CreateTableEintrag extends Migration
             $table->int("buerger_id")->unsigned();
             $table->bool("bestaetigt")->default(false);
             $table->bool("chat_verfuegbar")->default(true);
-            $table->timestamp("erstellt")->defaultCurrent();
+            $table->bool("nachricht_bei_interaktion")->default(true);
+            $table->datetime("erstellt")->defaultCurrent();
 
             // foreign keys
             $table->foreign("mandant_id")

@@ -24,7 +24,7 @@ class CreateTableBuerger extends Migration
             $table->string("stadt", 100)->nullable();
             $table->int("plz")->nullable();
             $table->string("telefon", 50)->nullable();
-            $table->timestamp("erstellt")->defaultCurrent();
+            $table->datetime("erstellt")->defaultCurrent();
         });
     }
 

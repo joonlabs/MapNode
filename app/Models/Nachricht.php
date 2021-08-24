@@ -13,12 +13,16 @@ class Nachricht extends Model
     /**
      * @param string|null $inhalt
      * @param bool|null $bestaetigt
-     * @param int|null $erstellt
+     * @param string|null $erstellt
+     * @param bool|null $namen_veroeffentlichen
+     * @param bool|null $nachricht_bei_interaktion
      */
     public function __construct(
         public ?string $inhalt = null,
         public ?bool $bestaetigt = null,
         public ?string $erstellt = null,
+        public ?bool $namen_veroeffentlichen = null,
+        public ?bool $nachricht_bei_interaktion = null,
     )
     {
     }

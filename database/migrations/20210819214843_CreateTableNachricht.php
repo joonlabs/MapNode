@@ -21,7 +21,9 @@ class CreateTableNachricht extends Migration
             $table->int("buerger_id")->unsigned();
             $table->string("inhalt");
             $table->bool("bestaetigt")->default(false);
-            $table->timestamp("erstellt")->defaultCurrent();
+            $table->bool("namen_veroeffentlichen")->default(true);
+            $table->bool("nachricht_bei_interaktion")->default(true);
+            $table->datetime("erstellt")->defaultCurrent();
 
             // foreign keys
             $table->foreign("eintrag_id")

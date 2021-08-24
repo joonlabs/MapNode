@@ -46,6 +46,10 @@ class Nachricht extends Definition
                         new GraphQLNonNull(new GraphQLBoolean()),
                     ),
                     new GraphQLTypeField(
+                        "namen_veroeffentlichen",
+                        new GraphQLNonNull(new GraphQLBoolean()),
+                    ),
+                    new GraphQLTypeField(
                         "erstellt",
                         new GraphQLNonNull(new GraphQLString()),
                     ),

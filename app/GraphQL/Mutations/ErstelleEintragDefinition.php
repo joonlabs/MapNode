@@ -42,7 +42,7 @@ class ErstelleEintragDefinition extends Definition
                 // create entry
                 $eintrag = \App\Models\Eintrag::create($args["eintrag"]);
 
-                // send mail
+                // send confirmation mail
                 $buerger = Buerger::get($args["eintrag"]["buerger_id"]);
                 Mail::to($buerger->email)
                     ->send(new ConfirmEintrag(

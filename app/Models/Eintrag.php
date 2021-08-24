@@ -13,13 +13,14 @@ class Eintrag extends Model
 
     /**
      * @param string|null $name
+     * @param int|null $status
      * @param string|null $inhalt
      * @param float|null $latitude
      * @param float|null $longitude
-     * @param string|null $email
      * @param bool|null $bestaetigt
      * @param bool|null $chat_verfuegbar
-     * @param int|null $erstellt
+     * @param bool|null $nachricht_bei_interaktion
+     * @param string|null $erstellt
      */
     public function __construct(
         public ?string $name = null,
@@ -29,6 +30,7 @@ class Eintrag extends Model
         public ?float $longitude = null,
         public ?bool $bestaetigt = null,
         public ?bool $chat_verfuegbar = null,
+        public ?bool $nachricht_bei_interaktion = null,
         public ?string $erstellt = null,
     )
     {
