@@ -23,15 +23,14 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
 
     // validate request
     $request->setHeaders(array_merge($request->headers(), ["Authorization" => "Bearer $token"]));
-    if(!Auth::validate($request))
+    if (!Auth::validate($request))
         abort(403, "Access denied");
 
     // get data and download as json
     $server = new \GraphQL\Servers\Server(\App\GraphQL\Schema::get());
     $server->setInternalServerErrorPrint(config("app.debug"));
     $filename = "mandant_{$mandant}_" . time();
-    $response->setHeader("Content-disposition", "attachment; filename=$filename.json");
-    return $server->handle("
+    $data = $server->handle("
         {
             mandant(id:$mandant){
                 eintraege{
@@ -48,10 +47,6 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
                         vorname
                         nachname
                         email
-                        strasse
-                        hausnummer
-                        stadt
-                        plz
                     }
                     nachrichten{
                         inhalt
@@ -62,6 +57,7 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
                         }
                         bestaetigt
                         erstellt
+                        namen_veroeffentlichen
                     }
                     bestaetigt
                     erstellt
@@ -69,5 +65,30 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
             }
         }
     ");
+    //var_dump($data);
+    //exit();
+    $response->setHeader("Content-disposition", "attachment; filename=$filename.xml");
+    $response->setHeader("Content-Type", "text/xml");
+    echo array2xml($data["data"]["mandant"]);
 })->where("mandant", "[0-9]+")
     ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|\-)+");
+
+function array2xml($array, $xml = false): bool|string
+{
+
+    if ($xml === false) {
+        $xml = new SimpleXMLElement('<mandant/>');
+    }
+
+    foreach ($array as $key => $value) {
+        if(is_int($key))
+            $key = "eintrag$key";
+        if (is_array($value)) {
+            array2xml($value, $xml->addChild($key));
+        } else {
+            $xml->addChild($key, $value);
+        }
+    }
+
+    return $xml->asXML();
+}
