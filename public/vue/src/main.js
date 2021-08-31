@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueAxios from "vue-axios";
 import axios from "axios";
 import router from "./router"
+import {jStore} from "./js/jStore.js";
 
 const app = createApp(App)
 app.use(VueAxios, axios)
@@ -15,13 +16,29 @@ window.topbar = {
 }
 // global project config
 window.config = {
-    url: "http://localhost:8080",
+    url: "", // use same url as JS files
     api : {
         endpoint : "/api",
         apiVersion: "1.0",
         lang : "de"
     },
     addressomat : {
-        key: "79cbb4baced42383636f2d2bd3d9deadfda63334"
+        key: jStore.load({key: "adressomat_token"})
     }
 }
+
+fetch("/api", {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        query: "{config{adressomat_token}}",
+        variables: {},
+    }),
+}).then(async function(result){
+    let token = (await result.json()).data.config.adressomat_token
+    window.config.addressomat.key = token
+    jStore.store({key: "adressomat_token", value: token})
+})

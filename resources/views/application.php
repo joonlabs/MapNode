@@ -27,7 +27,13 @@
                 apiUrl: "/api"
             });
             mapNode.init({
-                container: document.querySelector(".mapNode#container")
+                container: document.querySelector(".mapNode#container"),
+                callback: function() {
+                    // jump to entry after loading the map
+                    mapNode.jumpToEntry({
+                        entry: "{{ entry_id }}"
+                    })
+                }
             })
         })
     </script>

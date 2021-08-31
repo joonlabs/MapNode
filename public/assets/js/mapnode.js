@@ -32,11 +32,9 @@ class MapNode {
      *
      * @param container
      */
-    async init({container} = {}) {
+    async init({container, callback} = {}) {
         let _this = this;
         await this._loadMandant();
-
-        console.debug(this.mandant)
 
         this.map = this.adressOMat.Map({
             container: container,
@@ -60,6 +58,9 @@ class MapNode {
             })
             // set color
             marker.marker._element.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg width=\"100%\" height=\"100%\" viewBox=\"0 0 24 24\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\" xmlns:serif=\"http://www.serif.com/\" fill=\"%23" + eintrag.kategorie.farbe.substr(1) + "\" style=\"fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;\"><path d=\"M22,10C22,4.514 17.486,-0 12,0C6.514,0 2,4.514 2,10C2,13.025 3.52,15.891 5.387,18.225C8.079,21.59 11.445,23.832 11.445,23.832C11.781,24.056 12.219,24.056 12.555,23.832C12.555,23.832 15.921,21.59 18.613,18.225C20.48,15.891 22,13.025 22,10ZM12,6C9.792,6 8,7.792 8,10C8,12.208 9.792,14 12,14C14.208,14 16,12.208 16,10C16,7.792 14.208,6 12,6Z\"/></svg>')"
+
+            // make marker available in eintrag
+            eintrag.marker = marker
 
             marker.marker.getElement().addEventListener('click', () => {
                 setTimeout(() => {
@@ -219,6 +220,10 @@ class MapNode {
                 })
             }
         })
+
+        // execute callback if available
+        if (callback !== undefined)
+            callback()
     }
 
     async _loadMandant() {
@@ -465,6 +470,31 @@ class MapNode {
             title: "Nachricht erstellt",
             html: "<strong>Bestätigen</strong> Sie bitte den Versandt Ihrer Nachricht, indem Sie auf den <strong>Link in der Bestätigungs-E-Mail</strong> klicken, welche wir Ihnen soeben zugesandt haben."
         })
+    }
+
+    /**
+     * Fly to and open entry directly on the map.
+     *
+     * @param entry
+     */
+    jumpToEntry({entry} = {}) {
+        // validate entry
+        if (entry === "")
+            return
+        entry = parseInt(entry)
+
+        for (let eintrag of this.mandant.eintraege) {
+            if(eintrag.id === entry){
+                this.map.flyTo({
+                    latitude: eintrag.latitude,
+                    longitude: eintrag.longitude,
+                    zoom: 18,
+                    maxDuration: 1500
+                })
+                console.log(eintrag)
+                eintrag.marker.togglePopup()
+            }
+        }
     }
 
     /**

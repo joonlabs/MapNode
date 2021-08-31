@@ -15,13 +15,15 @@ use Curfle\Support\Facades\Route;
 /**
  * MapNode application serving.
  */
-Route::get("/mapnode/{mandant}/{token}", function (Request $request) {
+Route::get("/mapnode/{mandant}/{token}{id}", function (Request $request) {
     return view("application", [
         "mandant" => $request->input("mandant"),
         "token" => $request->input("token"),
+        "entry_id" => $request->input("id") !== null ? substr($request->input("id"), 1) : null
     ]);
 })->where("mandant", "[0-9]+")
-    ->where("token", "([a-z]|[A-Z]|[0-9])+");
+    ->where("token", "([a-z]|[A-Z]|[0-9])+")
+    ->where("id", "(@([0-9])+)?");
 
 /**
  * Confirming entries, which were created by the GraphQL api.
@@ -35,13 +37,13 @@ Route::get("/confirm/eintrag/{id}", function (Request $request) {
         abort(404, "Not found");
 
     // update entry
-    if(!$eintrag->bestaetigt){
+    if (!$eintrag->bestaetigt) {
         // update the db
         $eintrag->bestaetigt = true;
         $eintrag->update();
 
         // inform root user
-        $link = env("APP_URL") . "/mapnode/{$eintrag->mandant->id}/" . env("ADRESSOMAT_TOKEN");
+        $link = env("APP_URL") . "/mapnode/{$eintrag->mandant->id}/" . env("ADRESSOMAT_TOKEN") . "@{$eintrag->id}";
         $root = \App\Models\Benutzer::get(1);
         $mandant = $eintrag->mandant;
         Mail::to($root->email)
@@ -80,7 +82,7 @@ Route::get("/confirm/nachricht/{id}", function (Request $request) {
         $informedMailAdresses = [];
 
         // inform creator of entry
-        $link = env("APP_URL") . "/mapnode/{$eintrag->mandant->id}/" . env("ADRESSOMAT_TOKEN");
+        $link = env("APP_URL") . "/mapnode/{$eintrag->mandant->id}/" . env("ADRESSOMAT_TOKEN") . "@{$eintrag->id}";
         $buerger = $eintrag->buerger;
         if ($buerger->email !== $owner->email
             && $eintrag->nachricht_bei_interaktion) {
@@ -96,14 +98,14 @@ Route::get("/confirm/nachricht/{id}", function (Request $request) {
         $messages = $eintrag->nachrichten;
         foreach ($messages as $message) {
             // continue if message not confirmed
-            if(!$message->bestaetigt)
+            if (!$message->bestaetigt)
                 continue;
 
             // notify buerger of mail
             $buerger = $message->buerger;
-            if($buerger->email !== $owner->email
+            if ($buerger->email !== $owner->email
                 && $message->nachricht_bei_interaktion
-                && !in_array($buerger->email, $informedMailAdresses)){
+                && !in_array($buerger->email, $informedMailAdresses)) {
                 $informedMailAdresses[] = $buerger->email;
                 Mail::to($buerger->email)
                     ->send(new \App\Mail\NotifiyMessageOwner(

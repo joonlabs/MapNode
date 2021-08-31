@@ -40,7 +40,7 @@
       <div class="button mT" @click="updateClient"><span class="icon-check"></span>Mandant aktualisieren</div>
       <!-- Map -->
       <code>&lt;iframe class="map" src="{{url}}/mapnode/{{client.id}}/{{key}}"&gt;</code>
-      <div id="map"><iframe class ="map" :src="url + '/mapnode/' + client.id + '/' + key"></iframe></div>
+      <div id="map"><iframe class="map" :src="'/mapnode/' + client.id + '/' + key"></iframe></div>
 
     </div>
   </div>
@@ -59,7 +59,7 @@ export default {
     return {
       client: {},
       key: window.config.addressomat.key,
-      url: window.config.url
+      url: "https://" + window.location.hostname,
     }
   },
   async mounted() {
@@ -110,7 +110,10 @@ export default {
       long = parseFloat(long.replace(",","."))
 
       await jClient.updateClient(_this.client.id, name,lat,long,zoom)
-      this.$router.go()
+
+      let src = document.querySelector("iframe").src
+      document.querySelector("iframe").src = "about:blank"
+      document.querySelector("iframe").src = src
     },
     exportClient() {
       let _this = this

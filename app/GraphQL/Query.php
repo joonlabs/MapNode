@@ -2,10 +2,12 @@
 
 namespace App\GraphQL;
 
+use App\GraphQL\Queries\ConfigDefinition;
 use App\GraphQL\Queries\EintragDefinition;
 use App\GraphQL\Queries\KategorienDefinition;
 use App\GraphQL\Queries\MandantDefinition;
 use App\GraphQL\Queries\MandantenDefinition;
+use App\GraphQL\Types\Config;
 use GraphQL\Fields\GraphQLTypeField;
 use GraphQL\Types\GraphQLObjectType;
 use GraphQL\Schemas\Schema as GraphQLSchema;
@@ -26,6 +28,7 @@ class Query
                 MandantDefinition::get(),
                 EintragDefinition::get(),
                 KategorienDefinition::get(),
+                ConfigDefinition::get(),
             ];
         });
     }
