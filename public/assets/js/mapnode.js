@@ -493,6 +493,7 @@ class MapNode {
                 })
                 console.log(eintrag)
                 eintrag.marker.togglePopup()
+                eintrag.marker.marker.getElement().click()
             }
         }
     }
