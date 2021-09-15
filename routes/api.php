@@ -75,7 +75,7 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
         $eintraege[] = flatten($eintrag);
     }
 
-    echo buildCSV($eintraege);
+    return buildCSV($eintraege);
 })->where("mandant", "[0-9]+")
     ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|\-)+");
 
