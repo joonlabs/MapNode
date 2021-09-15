@@ -108,7 +108,7 @@ function buildCSV(array $array): string
     $csv .= implode(",", array_keys(reset($array)));
     foreach ($array as $value) {
         array_walk($value, function(&$val){
-            $val = str_replace('"', '\"', $val);
+            $val = str_replace('"', '""', $val);
         });
         $csv .= "\n\"" . implode('","', $value)."\"";
     }
