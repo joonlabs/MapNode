@@ -67,28 +67,50 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
     ");
     //var_dump($data);
     //exit();
-    $response->setHeader("Content-disposition", "attachment; filename=$filename.xml");
-    $response->setHeader("Content-Type", "text/xml");
-    echo array2xml($data["data"]["mandant"]);
+    $response->setHeader("Content-disposition", "attachment; filename=$filename.csv");
+    $response->setHeader("Content-Type", "text/csv");
+
+    $eintraege = [];
+    foreach ($data["data"]["mandant"]["eintraege"] as $eintrag) {
+        $eintraege[] = flatten($eintrag);
+    }
+
+    echo buildCSV($eintraege);
 })->where("mandant", "[0-9]+")
     ->where("token", "([a-z]|[A-Z]|[0-9]|\.|\_|\-)+");
 
-function array2xml($array, $xml = false): bool|string
+/**
+ * Flattens a data array for csv export.
+ *
+ * @param array $array
+ * @return array
+ */
+function flatten(array $array): array
 {
-
-    if ($xml === false) {
-        $xml = new SimpleXMLElement('<mandant/>');
-    }
-
-    foreach ($array as $key => $value) {
-        if(is_int($key))
-            $key = "eintrag$key";
-        if (is_array($value)) {
-            array2xml($value, $xml->addChild($key));
-        } else {
-            $xml->addChild($key, $value);
+    unset($array["nachrichten"]);
+    $return = [];
+    array_walk($array, function ($item, $key) use (&$return) {
+        if (!is_array($item))
+            $return[$key] = $item;
+        else {
+            $inner = flatten($item);
+            foreach ($inner as $innerKey => $innerItem) {
+                $return["{$key}_$innerKey"] = $innerItem;
+            }
         }
-    }
+    });
+    return $return;
+}
 
-    return $xml->asXML();
+function buildCSV(array $array): string
+{
+    $csv = "";
+    $csv .= implode(",", array_keys(reset($array)));
+    foreach ($array as $value) {
+        array_walk($value, function(&$val){
+            $val = str_replace('"', '\"', $val);
+        });
+        $csv .= "\n\"" . implode('","', $value)."\"";
+    }
+    return $csv;
 }
