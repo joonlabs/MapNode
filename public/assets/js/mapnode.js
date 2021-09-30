@@ -396,7 +396,7 @@ class MapNode {
                 // '<input id="stadt" class="mapNode input bigger" placeholder="Stadt">' +
                 '<br><b>Informationen über den Eintrag</b>' +
                 await _this._buildSelectKategorien() +
-                '<input id="name" class="mapNode input full" placeholder="Titel*">' +
+                '<input id="name" class="mapNode input full" placeholder="Projektname*">' +
                 '<textarea class="mapNode full" placeholder="Beschreibung" id="inhalt"></textarea>' +
                 '<b>Einstellungen:</b>' +
                 '<input type="checkbox" id="nachrichtenInteraktion"> <label for="nachrichtenInteraktion"> E-Mails an mich bei neuen Nachrichten senden</label><br><br>' +
