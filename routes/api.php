@@ -72,6 +72,7 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
 
     $eintraege = [];
     foreach ($data["data"]["mandant"]["eintraege"] as $eintrag) {
+        $eintrag["anzahl_nachrichten"] = array_reduce($eintrag["nachrichten"], fn($c, $n) => $c + $n["bestaetigt"] ? 1 : 0, 0);
         $eintraege[] = flatten($eintrag);
     }
 
