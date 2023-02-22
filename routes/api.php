@@ -74,6 +74,26 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
     foreach ($data["data"]["mandant"]["eintraege"] as $eintrag) {
         $eintrag["anzahl_nachrichten"] = array_reduce($eintrag["nachrichten"], fn($c, $n) => $c + $n["bestaetigt"] ? 1 : 0, 0);
         $eintraege[] = flatten($eintrag);
+
+        // add Nachrichten entries
+        foreach ($eintrag["nachrichten"] as $nachricht) {
+            $nachricht = [
+                "id" => "",
+                "name" => $eintrag["name"],
+                "inhalt" => $nachricht["inhalt"],
+                "latitude" => "",
+                "longitude" => "",
+                "kategorie_name" => "",
+                "kategorie_farbe" => "",
+                "buerger_vorname" => $nachricht["buerger"]["vorname"],
+                "buerger_nachname" => $nachricht["buerger"]["nachname"],
+                "buerger_email" => $nachricht["buerger"]["email"],
+                "bestaetigt" => $nachricht["bestaetigt"],
+                "erstellt" => $nachricht["erstellt"],
+                "anzahl_nachrichten" => "",
+            ];
+            $eintraege[] = flatten($nachricht);
+        }
     }
 
     return buildCSV($eintraege);
