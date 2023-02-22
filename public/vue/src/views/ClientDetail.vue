@@ -18,10 +18,16 @@
           <!-- Zoom -->
           <label for="zoom">Zoom</label>
           <select id="zoom">
-            <option>Sehr Fern</option>
-            <option>Fern</option>
-            <option>Nah</option>
-            <option>Sehr Nah</option>
+            <option>Detailliert (18)</option>
+            <option>Detailliert (17)</option>
+            <option>Sehr Nah (16)</option>
+            <option>Sehr Nah (15)</option>
+            <option>Nah (14)</option>
+            <option>Nah (13)</option>
+            <option>Fern (12)</option>
+            <option>Fern (11)</option>
+            <option>Sehr Fern (10)</option>
+            <option>Sehr Fern (9)</option>
           </select>
         </div>
       </div>
@@ -71,10 +77,17 @@ export default {
     //fill client informations in form
     document.getElementById("name").value = _this.client.name
     //Convert Int to Text
-    if(_this.client.karte_zoom === 16) _this.client.karte_zoom = "Sehr Nah"
-    if(_this.client.karte_zoom === 14) _this.client.karte_zoom = "Nah"
-    if(_this.client.karte_zoom === 12) _this.client.karte_zoom = "Fern"
-    if(_this.client.karte_zoom === 10) _this.client.karte_zoom = "Sehr Fern"
+    if(_this.client.karte_zoom === 18) _this.client.karte_zoom = "Detailliert (18)"
+    if(_this.client.karte_zoom === 17) _this.client.karte_zoom = "Detailliert (17)"
+    if(_this.client.karte_zoom === 16) _this.client.karte_zoom = "Sehr Nah (16)"
+    if(_this.client.karte_zoom === 15) _this.client.karte_zoom = "Sehr Nah (15)"
+    if(_this.client.karte_zoom === 14) _this.client.karte_zoom = "Nah (14)"
+    if(_this.client.karte_zoom === 13) _this.client.karte_zoom = "Nah (13)"
+    if(_this.client.karte_zoom === 12) _this.client.karte_zoom = "Fern (12)"
+    if(_this.client.karte_zoom === 11) _this.client.karte_zoom = "Fern (11)"
+    if(_this.client.karte_zoom === 10) _this.client.karte_zoom = "Sehr Fern (10)"
+    if(_this.client.karte_zoom === 9) _this.client.karte_zoom = "Sehr Fern (9)"
+
     document.getElementById("zoom").value = _this.client.karte_zoom
     document.getElementById("lat").value = _this.client.karte_latitude
     document.getElementById("long").value = _this.client.karte_longitude
