@@ -113,10 +113,16 @@ export default {
         return
       }
       //Convert Text to Int
-      if(zoom === "Sehr Nah") zoom = 16
-      if(zoom === "Nah") zoom = 14
-      if(zoom === "Fern") zoom = 12
-      if(zoom === "Sehr Fern") zoom = 10
+      if(zoom === "Detailliert (18)") zoom = 18
+      if(zoom === "Detailliert (17)") zoom = 17
+      if(zoom === "Sehr Nah (16)") zoom = 16
+      if(zoom === "Sehr Nah (15)") zoom = 15
+      if(zoom === "Nah (14)") zoom = 14
+      if(zoom === "Nah (13)") zoom = 13
+      if(zoom === "Fern (12)") zoom = 12
+      if(zoom === "Fern (11)") zoom = 11
+      if(zoom === "Sehr Fern (10)") zoom = 10
+      if(zoom === "Sehr Fern (9)") zoom = 9
 
 
       lat = parseFloat(lat.replace(",","."))
