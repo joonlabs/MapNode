@@ -79,7 +79,7 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
         foreach ($eintrag["nachrichten"] as $nachricht) {
             $nachricht = [
                 "id" => "",
-                "name" => $eintrag["name"],
+                "name" => "",
                 "inhalt" => $nachricht["inhalt"],
                 "latitude" => "",
                 "longitude" => "",
