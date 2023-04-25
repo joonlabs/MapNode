@@ -9,6 +9,7 @@ use App\GraphQL\Mutations\ErstelleEintragDefinition;
 use App\GraphQL\Mutations\ErstelleMandantDefinition;
 use App\GraphQL\Mutations\ErstelleNachrichtDefinition;
 use App\GraphQL\Mutations\LoginDefinition;
+use App\GraphQL\Mutations\UpvoteEintragDefinition;
 use GraphQL\Arguments\GraphQLFieldArgument;
 use GraphQL\Fields\GraphQLTypeField;
 use GraphQL\Types\GraphQLInt;
@@ -34,6 +35,7 @@ class Mutation
                 ErstelleNachrichtDefinition::get(),
                 ErstelleMandantDefinition::get(),
                 BearbeiteEintragDefinition::get(),
+                UpvoteEintragDefinition::get(),
                 BearbeiteMandantDefinition::get(),
             ];
         });

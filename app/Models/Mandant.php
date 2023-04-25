@@ -12,14 +12,16 @@ class Mandant extends Model
 
     /**
      * @param string|null $name
+     * @param string|null $style
      * @param string|null $kennung
      * @param float|null $karte_latitude
      * @param float|null $karte_longitude
      * @param int|null $karte_zoom
-     * @param int|null $erstellt
+     * @param string|null $erstellt
      */
     public function __construct(
         public ?string $name = null,
+        public ?string $style = null,
         public ?string $kennung = null,
         public ?float $karte_latitude = null,
         public ?float $karte_longitude = null,

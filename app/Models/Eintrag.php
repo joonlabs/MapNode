@@ -14,6 +14,7 @@ class Eintrag extends Model
     /**
      * @param string|null $name
      * @param int|null $status
+     * @param int|null $upvotes
      * @param string|null $inhalt
      * @param float|null $latitude
      * @param float|null $longitude
@@ -25,6 +26,7 @@ class Eintrag extends Model
     public function __construct(
         public ?string $name = null,
         public ?int $status = null,
+        public ?int $upvotes = 0,
         public ?string $inhalt = null,
         public ?float $latitude = null,
         public ?float $longitude = null,

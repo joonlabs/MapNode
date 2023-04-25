@@ -7,6 +7,8 @@ use Curfle\Support\Exceptions\Http\NotFoundHttpException;
 use Curfle\Support\Facades\Mail;
 use Curfle\Support\Facades\Route;
 
+error_reporting(E_ALL ^ E_DEPRECATED);
+
 /**
  * Here the default web routes can be registered. All routes in this directory get
  * will receive the web middleware stack. Now start creating something awesome!
@@ -19,7 +21,7 @@ Route::get("/mapnode/{mandant}/{token}{id}", function (Request $request) {
     return view("application", [
         "mandant" => $request->input("mandant"),
         "token" => $request->input("token"),
-        "entry_id" => $request->input("id") !== null ? substr($request->input("id"), 1) : null
+        "entry_id" => $request->input("id") !== null ? substr($request->input("id"), 1) : ""
     ]);
 })->where("mandant", "[0-9]+")
     ->where("token", "([a-z]|[A-Z]|[0-9])+")

@@ -40,7 +40,8 @@ class MapNode {
             container: container,
             latitude: this.mandant.karte_latitude,
             longitude: this.mandant.karte_longitude,
-            zoom: this.mandant.karte_zoom
+            zoom: this.mandant.karte_zoom,
+            style: this.mandant.style,
         })
 
         for (let eintrag of this.mandant.eintraege) {
@@ -74,6 +75,7 @@ class MapNode {
                                         name
                                         status
                                         inhalt
+                                        upvotes
                                         kategorie{
                                             name
                                             farbe
@@ -101,6 +103,12 @@ class MapNode {
                             }
                         })).data.eintrag
 
+                        // calculate id for entry
+                        const entryId = eintragData.id + "_" + eintragData.erstellt
+
+                        // only display if no item in local storage with same id
+                        let shouldDisplayLikeButton = window.localStorage.getItem(entryId) === null
+
                         // display entry
                         Swal.fire({
                             title: eintragData.name,
@@ -112,11 +120,41 @@ class MapNode {
                                 '<span style="color: ' + eintragData.kategorie.farbe + '">' + eintragData.kategorie.name + '</span>' +
                                 '<b>Erstellt:</b>' +
                                 '<span>' + eintragData.erstellt + '</span>' +
+                                '<b>Likes:</b>' +
+                                '<span><span id="numberLikes">' + eintragData.upvotes + '</span>x👍🏽</span>' +
+                                (shouldDisplayLikeButton ? '<div class="mapNode button secondary" style="display: inline-block; margin-left: 20px;" id="addLike">Like hinzufügen</div>' : '') +
                                 '<b>Nachrichten:</b>' +
                                 _this._renderMessages({messages: eintragData.nachrichten}) +
                                 '<div class="mapNode button secondary" id="sendMessage">Neue Nachricht schreiben</div>'
                         })
 
+                        // on like click
+                        if(shouldDisplayLikeButton){
+                            document.querySelector("#addLike").onclick = async function () {
+                                // add like
+                                const likeSpan = document.querySelector("#numberLikes")
+                                likeSpan.innerHTML = (parseInt(likeSpan.innerHTML) + 1).toString()
+
+                                // upvote entry
+                                await _this._api({
+                                    query: `mutation upvote($id: Int!){
+                                    upvoteEintrag(id: $id)
+                                }`,
+                                    variables: {
+                                        id: eintrag.id
+                                    }
+                                })
+
+                                // add to local storage
+                                window.localStorage.setItem(entryId, "true")
+
+                                // remove button
+                                this.remove()
+                            }
+                        }
+
+
+                        // on send message click
                         document.querySelector("#sendMessage").onclick = async function () {
                             const {value: formValues} = await Swal.fire({
                                 title: "Neue Nachricht schreiben",
@@ -232,12 +270,14 @@ class MapNode {
             query: `query get($id:Int!){
                 mandant(id:$id){
                     name
+                    style
                     karte_latitude
                     karte_longitude
                     karte_zoom
                     eintraege{
                         id
                         name
+                        upvotes
                         latitude
                         longitude
                         kategorie{
@@ -484,7 +524,7 @@ class MapNode {
         entry = parseInt(entry)
 
         for (let eintrag of this.mandant.eintraege) {
-            if(eintrag.id === entry){
+            if (eintrag.id === entry) {
                 this.map.flyTo({
                     latitude: eintrag.latitude,
                     longitude: eintrag.longitude,

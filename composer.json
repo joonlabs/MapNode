@@ -6,8 +6,8 @@
   "keywords": [],
   "require": {
     "php": ">=8.0",
-    "curfle/framework": "^0.2.0",
-    "joonlabs/php-graphql": "^2.0"
+    "curfle/framework": "v0.2.32",
+    "joonlabs/php-graphql": "v2.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.3.3"

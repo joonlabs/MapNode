@@ -39,6 +39,10 @@ class Eintrag extends Definition
                         new GraphQLNonNull(new GraphQLInt()),
                     ),
                     new GraphQLTypeField(
+                        "upvotes",
+                        new GraphQLNonNull(new GraphQLInt()),
+                    ),
+                    new GraphQLTypeField(
                         "inhalt",
                         new GraphQLString(),
                     ),

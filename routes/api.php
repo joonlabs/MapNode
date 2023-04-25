@@ -5,6 +5,8 @@ use Curfle\Http\Response;
 use Curfle\Support\Facades\Auth;
 use Curfle\Support\Facades\Route;
 
+error_reporting(E_ALL ^ E_DEPRECATED);
+
 /**
  * Here the api routes can be registered. All routes in this directory
  * will receive the "api" middleware group. Also, they will get the
@@ -37,6 +39,7 @@ Route::get("/download/{mandant}/{token}", function (Request $request, Response $
                     id
                     name
                     inhalt
+                    upvotes
                     latitude
                     longitude
                     kategorie{

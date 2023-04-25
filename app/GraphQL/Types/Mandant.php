@@ -36,6 +36,10 @@ class Mandant extends Definition
                         new GraphQLNonNull(new GraphQLString()),
                     ),
                     new GraphQLTypeField(
+                        "style",
+                        new GraphQLNonNull(new GraphQLString()),
+                    ),
+                    new GraphQLTypeField(
                         "kennung",
                         new GraphQLNonNull(new GraphQLString()),
                     ),
